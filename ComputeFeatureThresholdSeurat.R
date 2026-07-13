@@ -121,7 +121,8 @@
         feature,
         "' feature in the specified assay. Please ensure that the '",
         feature,
-        "' feature is present."
+        "' feature is present. Error details from Seurat::FetchData: ",
+        e$message
       )
     }
   )
