@@ -20,7 +20,7 @@
 #' The threshold deterined per layer and a boolean value indicating whether each cell passes
 #' the threshold are stored in the Seurat object's metadata.
 #'
-#' @param SeuObj A SeuratObject with normalized counts and a the searched feature in its data layers.
+#' @param SeuratObject A SeuratObject with normalized counts and a the searched feature in its data layers.
 #' @param assay Character string specifying the assay in the SeuratObject to use for MALAT1 expression. Default is "RNA".
 #' @param layers Character vector specifying the layers in the SeuratObject to process.
 #'   Default is `NULL`, which processes all layers containing "data" in their names.
@@ -43,7 +43,7 @@
 #'
 #' @return:
 #' \describe{
-#'   \item{SeuObj} {The input SeuratObject with the MALAT1 threshold applied.}
+#'   \item{SeuratObject} {The input SeuratObject with the MALAT1 threshold applied.}
 #' }
 #'
 #'@noRd
@@ -76,20 +76,20 @@
 #' }
 
 .CalculateFeatureThresholdSeurat <- function(
-  SeuObj,
+  SeuratObject,
   assay = "RNA",
   layers = NULL,
   feature = "MALAT1",
   ...
 ) {
   # Check if the specified assay exists in the Seurat object
-  if (!assay %in% names(SeuObj@assays)) {
+  if (!assay %in% names(SeuratObject@assays)) {
     stop(paste("Assay", assay, "not found in the Seurat object."))
   }
 
   # Fetch all layers present in the Seurat object for the specified assay
   object.layers <- SeuratObject::Layers(
-    SeuObj,
+    SeuratObject,
     assay = assay,
   )
 
@@ -114,7 +114,7 @@
   # Check if the Seurat object contains a "MALAT1" feature in the specified assay.
   # If not, stop the function and return an error message.
   tryCatch(
-    SeuratObject::FetchData(SeuObj, assay = assay, vars = feature),
+    SeuratObject::FetchData(SeuratObject, assay = assay, vars = feature),
     error = function(e) {
       stop(
         "The Seurat object does not contain a '",
@@ -135,7 +135,7 @@
       # We use suppressWarnings to avoid the warnings that arise when fetching data f
       # from specific layers.
       feature.logcounts <- suppressWarnings(SeuratObject::FetchData(
-        SeuObj,
+        SeuratObject,
         assay = assay,
         vars = feature,
         layer = layer
@@ -183,10 +183,10 @@
   feature.metadata$cell.id <- NULL
 
   # Add the computed MALAT1 threshold and pass/fail results to the Seurat object's metadata.
-  SeuObj <- Seurat::AddMetaData(
-    object = SeuObj,
+  SeuratObject <- Seurat::AddMetaData(
+    object = SeuratObject,
     metadata = feature.metadata
   )
 
-  return(SeuObj)
+  return(SeuratObject)
 }
