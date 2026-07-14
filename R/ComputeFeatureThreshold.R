@@ -55,7 +55,7 @@
 #'   threshold to return in case of errors (e.g. no high MALAT1 peaks). Default is \code{2}
 #'   - fine-tuned for MALAT1.
 #'
-#' @import stats
+#' @importFrom stats density smooth.spline lm predict poly
 #' @return threshold Numeric scalar: the MALAT1 threshold (left quadratic intercept,
 #' constrained to be at least \code{abs.min}). On error, the function returns the
 #' numeric value \code{2} as a conservative default threshold.
